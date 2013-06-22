@@ -18,7 +18,7 @@ package starling.extensions.tmxmaps
 	public class TMXLayer extends Sprite
 	{
 		private var _layerData:Array = new Array();
-		private var _layerHolder:Sprite = new Sprite;
+		private var _layerSprite:Sprite = new Sprite;
 		
 		public function TMXLayer(data:Array):void
 		{
@@ -27,12 +27,12 @@ package starling.extensions.tmxmaps
 		
 		public function getHolder():Sprite
 		{
-			return _layerHolder;
+			return _layerSprite;
 		}
 		
 		public function drawLayer():void
 		{
-			addChild(_layerHolder);
+			addChild(_layerSprite);
 		}
 		
 		public function get layerData():Array
@@ -40,9 +40,9 @@ package starling.extensions.tmxmaps
 			return _layerData;
 		}
 		
-		public function get layerHolder():Sprite
+		public function get layerSprite():Sprite
 		{
-			return _layerHolder;
+			return _layerSprite;
 		}
 	}
 }

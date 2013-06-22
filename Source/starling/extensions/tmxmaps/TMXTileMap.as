@@ -293,15 +293,15 @@ package starling.extensions.tmxmaps
 						var img:Image = new Image(_tilesheets[findTileSheet(_layers[i].layerData[j])].textureAtlas.getTexture(String(_layers[i].layerData[j])));
 						img.x = col;
 						img.y = row;
-						_layers[i].layerHolder.addChild(img);
+						_layers[i].layerSprite.addChild(img);
 					}
 
 					col += _tileWidth;
 				}
 				
-				if (!_layers[i].layerHolder.isFlattened)
+				if (!_layers[i].layerSprite.isFlattened)
 				{
-					_layers[i].layerHolder.flatten();
+					_layers[i].layerSprite.flatten();
 				}
 			}
 
