@@ -14,7 +14,7 @@
  *
  * Optimize & Profile any Flash content with TheMiner ( http://www.sociodox.com/theminer )
  */
-package starling.extensions.tmxmaps
+package starling.extensions.tmxmaps.tools
 {
 	import flash.utils.ByteArray;
 	
