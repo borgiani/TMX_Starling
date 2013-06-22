@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="30" height="25" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Desert" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="../../../../../../../../Program Files (x86)/Tiled/examples/tmw_desert_spacing.png" width="265" height="199"/>
+ </tileset>
+ <layer name="Camada de Tiles 1" width="30" height="25">
+  <data encoding="base64" compression="zlib">
+   eJzt1csKwjAQBdBoF2oLvgrWB1a0WqmP/v/neUGDYciQpI3BRRZnkYH0dialKYUQpSdTmMHc4zP/IfegqbWGXN0eX1ZQwDrwnAcwhKTj/g1sHe1gAilkljk1WR/h5KjqkCtdSe4ZbnD5cS7tt3Lov29uHThXPWOZ8xDvb+YZeM4c3bmHyNXNIUSurzm3ZN185uji7pg7grH4/uNUCVPn7DW53H0g7w/5rqqMqZvY9CvvjwUsiZypm+SW5xtFUT8vcMZSYQ==
+  </data>
+ </layer>
+</map>
