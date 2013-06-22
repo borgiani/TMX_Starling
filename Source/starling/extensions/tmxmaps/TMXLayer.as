@@ -18,16 +18,12 @@ package starling.extensions.tmxmaps
 	public class TMXLayer extends Sprite
 	{
 		private var _layerData:Array = new Array();
-		private var _layerSprite:Sprite = new Sprite;
+		private var _layerSprite:Sprite;
 		
 		public function TMXLayer(data:Array):void
 		{
+			_layerSprite = new Sprite();
 			_layerData = data;
-		}
-		
-		public function getHolder():Sprite
-		{
-			return _layerSprite;
 		}
 		
 		public function drawLayer():void
