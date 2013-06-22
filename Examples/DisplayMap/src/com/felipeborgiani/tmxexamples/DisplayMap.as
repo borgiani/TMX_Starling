@@ -41,7 +41,7 @@ package com.felipeborgiani.tmxexamples
 		{
 			for (var i:int = 0; i < mapTMX.layers.length; i++) 
 			{
-				addChild(mapTMX.layers[i].layerHolder);
+				addChild(mapTMX.layers[i].layerSprite);
 			}
 		}		
 	}

@@ -10,8 +10,9 @@
 package starling.extensions.tmxmaps
 {
 	import starling.display.Image;
-	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.EventDispatcher;
+	import starling.extensions.tmxmaps.tools.Base64;
 
 	import flash.display.Bitmap;
 	import flash.events.Event;
@@ -23,7 +24,7 @@ package starling.extensions.tmxmaps
 	 * @author Felipe Borgiani
 	 * Based on the original TMXTileSheet by Shaun Mitchell
 	 */
-	public class TMXTileMap extends Sprite
+	public class TMXTileMap extends EventDispatcher
 	{
 		// The TMX file to load
 		private var _fileName:String;
@@ -171,7 +172,7 @@ package starling.extensions.tmxmaps
 				_tileHeight = _TMX.@tileheight;
 				_tileWidth = _TMX.@tilewidth;
 
-				trace("map width" + _mapWidth);
+				//trace("map width" + _mapWidth);
 
 				_numLayers = getNumLayers();
 				_numTilesets = getNumTilesets();
@@ -187,7 +188,7 @@ package starling.extensions.tmxmaps
 
 		private function loadEmbedTilesets():void
 		{
-			trace("loading embedded tilesets");
+			//trace("loading embedded tilesets");
 			_mapLoaded = true;
 
 			if (_TMX)
@@ -196,7 +197,7 @@ package starling.extensions.tmxmaps
 				_tileHeight = _TMX.@tileheight;
 				_tileWidth = _TMX.@tilewidth;
 
-				trace("map width" + _mapWidth);
+				//trace("map width" + _mapWidth);
 
 				_numLayers = getNumLayers();
 				_numTilesets = getNumTilesets();
@@ -223,7 +224,7 @@ package starling.extensions.tmxmaps
 			_tilelistCount++;
 			if (_tilelistCount >= _numTilesets)
 			{
-				trace("done loading tilelists");
+				//trace("done loading tilelists");
 				loadMapData();
 			}
 			else
@@ -243,7 +244,7 @@ package starling.extensions.tmxmaps
 			{
 				for (var i:int = 0; i < _numLayers; i++)
 				{
-					trace("loading map data");
+					//trace("loading map data");
 					var ba:ByteArray = Base64.decode(_TMX.layer[i].data);
 					ba.uncompress();
 
@@ -274,10 +275,10 @@ package starling.extensions.tmxmaps
 		// draw the layers into a holder contained in a TMXLayer object
 		private function drawLayers():void
 		{
-			trace("drawing layers");
+			//trace("drawing layers");
 			for (var i:int = 0; i < _numLayers; i++)
 			{
-				trace("drawing layers");
+				//trace("drawing layers");
 				var row:int = 0;
 				var col:int = 0;
 				for (var j:int = 0; j < _layers[i].layerData.length; j++)

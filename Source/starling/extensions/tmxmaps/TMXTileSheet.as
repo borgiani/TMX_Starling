@@ -11,6 +11,7 @@ package starling.extensions.tmxmaps
 {
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.EventDispatcher;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 
@@ -24,7 +25,7 @@ package starling.extensions.tmxmaps
 	 * @author Felipe Borgiani
 	 * Based on the original TMXTileSheet by Shaun Mitchell
 	 */
-	public class TMXTileSheet extends Sprite
+	public class TMXTileSheet extends EventDispatcher
 	{
 		// the name and file paths
 		private var _name:String;
