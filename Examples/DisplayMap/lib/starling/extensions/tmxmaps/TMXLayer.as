@@ -17,7 +17,10 @@ package starling.extensions.tmxmaps
 	 */
 	public class TMXLayer
 	{
+		// Layer Data is just an array of tile GIDs
 		private var _layerData:Array = new Array();
+		private var _layerSprite:Sprite;
+		private var _tiles:Vector.<TMXTile> = new Vector.<TMXTile>();
 		
 		public function TMXLayer(data:Array):void
 		{

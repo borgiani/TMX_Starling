@@ -34,15 +34,18 @@ package starling.extensions.tmxmaps
 		private var _sheet:Bitmap;
 		private var _textureAtlas:TextureAtlas;
 		private var _imageLoader:Loader = new Loader();
-		private var _startID:uint;
+		private var _firstID:uint;
 		private var _tileHeight:uint;
 		private var _tileWidth:uint;
 		private var _embedded:Boolean;
 		private var _spacing:uint;
 		private var _margin:uint;
+		// tiles
+		private var _tiles:Vector.<TMXTile>;
 
 		public function TMXTileSheet():void
 		{
+			_tiles = new Vector.<TMXTile>();
 		}
 
 		public function loadTileSheet(name:String, sheetFile:String, tileWidth:uint, tileHeight:uint, startID:uint):void
@@ -50,7 +53,7 @@ package starling.extensions.tmxmaps
 			_embedded = false;
 			_name = name;
 			_sheetFilename = sheetFile;
-			_startID = startID;
+			_firstID = startID;
 
 			_tileHeight = tileHeight;
 			_tileWidth = tileWidth;
@@ -66,7 +69,7 @@ package starling.extensions.tmxmaps
 			trace("creating TMX tilesheet");
 			_embedded = true;
 			_name = name;
-			_startID = startID;
+			_firstID = startID;
 
 			_sheet = img;
 
@@ -99,7 +102,7 @@ package starling.extensions.tmxmaps
 			var numRows:uint = (_sheet.height - _margin) / (_tileHeight + _spacing);
 			var numCols:uint = (_sheet.width - _margin) / (_tileWidth + _spacing);
 
-			var id:int = _startID;
+			var id:int = _firstID;
 
 			var xml:XML = <Atlas></Atlas>;
 
@@ -111,6 +114,8 @@ package starling.extensions.tmxmaps
 				{
 					id++;
 					xml.child("TextureAtlas").appendChild(<SubTexture name={id} x = {(_margin + (j * (_tileWidth + _spacing)))} y={(_margin + (i * (_tileHeight + _spacing))) } width={_tileWidth} height={_tileHeight}/>);
+					
+					_tiles.push(new TMXTile(this, id));
 				}
 			}
 
@@ -119,8 +124,20 @@ package starling.extensions.tmxmaps
 			trace(newxml);
 
 			_textureAtlas = new TextureAtlas(Texture.fromBitmap(_sheet), newxml);
+			
 			trace("done with atlas, dispatching");
 			dispatchEvent(new starling.events.Event(starling.events.Event.COMPLETE));
+		}
+		
+		public function tileWithGID(gid:uint):TMXTile
+		{
+			for (var i:int = 0; i < _tiles.length; i++) 
+			{
+				if (_tiles[i].tileID == gid)
+					return _tiles[i];
+			}
+			
+			return null;
 		}
 
 		public function get sheet():Bitmap
@@ -131,6 +148,16 @@ package starling.extensions.tmxmaps
 		public function get textureAtlas():TextureAtlas
 		{
 			return _textureAtlas;
+		}
+		
+		public function get firstID():uint 
+		{
+			return _firstID;
+		}
+		
+		public function get tiles():Vector.<TMXTile> 
+		{
+			return _tiles;
 		}
 	}
 }

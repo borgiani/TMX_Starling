@@ -283,7 +283,7 @@ package starling.extensions.tmxmaps
 
 					if (_layers[i].layerData[j] != 0)
 					{
-						var img:Image = new Image(_tilesheets[findTileSheet(_layers[i].layerData[j])].textureAtlas.getTexture(String(_layers[i].layerData[j])));
+						var img:Image = new Image(findTileWithGID(_layers[i].layerData[j]).texture);
 						img.x = col;
 						img.y = row;
 						_layers[i].layerSprite.addChild(img);
@@ -301,23 +301,20 @@ package starling.extensions.tmxmaps
 			// notify that the load is complete
 			dispatchEvent(new starling.events.Event(starling.events.Event.COMPLETE));
 		}
-
-		private function findTileSheet(id:uint):int
+		
+		private function findTileWithGID(gid:uint):TMXTile
 		{
-			var value:int = 0;
-			var theOne:int;
-			for (var i:int = 0; i < _tilesheets.length; i++)
+			var targetSheet:int;
+			
+			for (var i:int = 0; i < _tilesheets.length; i++) 
 			{
-				if (_tilesheets[i].textureAtlas.getTexture(String(id)) != null)
+				if (gid > _tilesheets[i].firstID)
 				{
-					theOne = i;
-				}
-				else
-				{
-					value = i;
+					targetSheet = i;
 				}
 			}
-			return theOne;
+			
+			return _tilesheets[targetSheet].tileWithGID(gid);
 		}
 	}
 }

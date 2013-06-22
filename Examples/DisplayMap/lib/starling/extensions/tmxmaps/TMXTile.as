@@ -10,6 +10,7 @@
 package starling.extensions.tmxmaps 
 {
 	import flash.utils.Dictionary;
+	import starling.textures.Texture;
 	/**
 	 * ...
 	 * @author Felipe Borgiani
@@ -20,9 +21,10 @@ package starling.extensions.tmxmaps
 		private var _tileID:uint;
 		private var _properties:Dictionary;
 		
-		public function TMXTile(parentSheet:TMXTileSheet)
+		public function TMXTile(parentSheet:TMXTileSheet, tileID:uint)
 		{
 			this._parentSheet = parentSheet;
+			this._tileID = tileID;
 		}
 		
 		public function get parentSheet():TMXTileSheet 
@@ -39,6 +41,11 @@ package starling.extensions.tmxmaps
 		{
 			return _properties;
 		}		
+		
+		public function get texture():Texture 
+		{
+			return _parentSheet.textureAtlas.getTexture(String(_tileID));
+		}
 	}
 
 }
