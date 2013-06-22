@@ -15,7 +15,7 @@ package starling.extensions.tmxmaps
 	 * @author Felipe Borgiani
 	 * Based on the original TMXTileSheet by Shaun Mitchell
 	 */
-	public class TMXLayer extends Sprite
+	public class TMXLayer
 	{
 		private var _layerData:Array = new Array();
 		private var _layerSprite:Sprite = new Sprite;
@@ -28,11 +28,6 @@ package starling.extensions.tmxmaps
 		public function getHolder():Sprite
 		{
 			return _layerSprite;
-		}
-		
-		public function drawLayer():void
-		{
-			addChild(_layerSprite);
 		}
 		
 		public function get layerData():Array
