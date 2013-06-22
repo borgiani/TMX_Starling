@@ -12,7 +12,8 @@ package starling.extensions.tmxmaps
 	import flash.net.URLRequest;
 
 	/**
-	 * @author shaun.mitchell
+	 * @author Felipe Borgiani
+	 * Based on the original TMXTileSheet by Shaun Mitchell
 	 */
 	public class TMXTileSheet extends Sprite
 	{

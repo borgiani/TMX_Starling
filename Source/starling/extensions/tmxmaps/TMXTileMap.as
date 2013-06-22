@@ -10,8 +10,9 @@ package starling.extensions.tmxmaps
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 
-	/**
-	 * @author shaun.mitchell
+/**
+	 * @author Felipe Borgiani
+	 * Based on the original TMXTileSheet by Shaun Mitchell
 	 */
 	public class TMXTileMap extends Sprite
 	{
