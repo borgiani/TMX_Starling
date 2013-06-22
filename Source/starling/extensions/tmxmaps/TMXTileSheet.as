@@ -9,6 +9,7 @@
  */
 package starling.extensions.tmxmaps
 {
+	import flash.utils.Dictionary;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
@@ -42,10 +43,13 @@ package starling.extensions.tmxmaps
 		private var _margin:uint;
 		// tiles
 		private var _tiles:Vector.<TMXTile>;
+		// properties
+		private var _properties:Dictionary;
 
 		public function TMXTileSheet():void
 		{
 			_tiles = new Vector.<TMXTile>();
+			_properties = new Dictionary();
 		}
 
 		public function loadTileSheet(name:String, sheetFile:String, tileWidth:uint, tileHeight:uint, startID:uint):void
@@ -158,6 +162,11 @@ package starling.extensions.tmxmaps
 		public function get tiles():Vector.<TMXTile> 
 		{
 			return _tiles;
+		}
+		
+		public function get properties():Dictionary 
+		{
+			return _properties;
 		}
 	}
 }

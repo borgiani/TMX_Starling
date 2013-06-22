@@ -201,6 +201,16 @@ package starling.extensions.tmxmaps
 					var tileSheet:TMXTileSheet = new TMXTileSheet();
 					//trace(_TMX.tileset[i].@name, _embedTilesets[i], _TMX.tileset[i].@tilewidth, _TMX.tileset[i].@tileheight, _TMX.tileset[i].@firstgid - 1, _TMX.tileset[i].@spacing, _TMX.tileset[i].@margin);
 					tileSheet.loadEmbedTileSheet(_TMX.tileset[i].@name, _embedTilesets[i], _TMX.tileset[i].@tilewidth, _TMX.tileset[i].@tileheight, _TMX.tileset[i].@firstgid - 1, _TMX.tileset[i].@spacing, _TMX.tileset[i].@margin);
+					
+					var qtdProp:int = _TMX.tileset[i].properties.property.length();
+					
+					for (var j:int = 0; j < _TMX.tileset[i].properties.property.length(); j++) 
+					{
+						var pname:String = _TMX.tileset[i].properties.property[j].@name;
+						var pvalue:String = _TMX.tileset[i].properties.property[j].@value;
+						tileSheet.properties[pname] = pvalue;
+					}
+					
 					_tilesheets.push(tileSheet);
 					_gidLookup.push(_TMX.tileset[i].@firstgid);
 				}
