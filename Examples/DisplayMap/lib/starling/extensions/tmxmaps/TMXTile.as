@@ -23,6 +23,7 @@ package starling.extensions.tmxmaps
 		
 		public function TMXTile(parentSheet:TMXTileSheet, tileID:uint)
 		{
+			this._properties = new Dictionary();
 			this._parentSheet = parentSheet;
 			this._tileID = tileID;
 		}

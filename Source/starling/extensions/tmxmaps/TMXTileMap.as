@@ -9,17 +9,15 @@
  */
 package starling.extensions.tmxmaps
 {
+	import flash.display.Bitmap;
+	import flash.events.Event;
+	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import starling.display.Image;
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
 	import starling.extensions.tmxmaps.tools.Base64;
-
-	import flash.display.Bitmap;
-	import flash.events.Event;
-	import flash.net.URLLoader;
-	import flash.net.URLRequest;
-	import flash.utils.ByteArray;
+	import starling.utils.Color;
 
 	/**
 	 * @author Felipe Borgiani
@@ -27,12 +25,8 @@ package starling.extensions.tmxmaps
 	 */
 	public class TMXTileMap extends EventDispatcher
 	{
-		// The TMX file to load
-		private var _fileName:String;
-		private var _loader:URLLoader;
-		private var _mapLoaded:Boolean;
 		// XML of TMX file
-		private var _TMX:XML;
+		private var _mapXML:XML;
 		// Layers and tilesheet holders
 		private var _layers:Vector.<TMXLayer>;
 		private var _tilesheets:Vector.<TMXTileSheet>;
@@ -44,16 +38,13 @@ package starling.extensions.tmxmaps
 		private var _mapWidth:uint;
 		private var _tileHeight:uint;
 		private var _tileWidth:uint;
+		private var _backgroundColor:uint;
 		private var _properties:Dictionary;
 		// used to get the correct tile from various tilesheets
-		private var _gidLookup:Vector.<uint>;
 		private var _embedTilesets:Vector.<Bitmap>;		
 
 		public function TMXTileMap():void
 		{
-			_mapLoaded = false;
-			_fileName = "";
-			_loader = new URLLoader();
 			_numLayers = 0;
 			_numTilesets = 0;
 			_tilelistCount = 0;
@@ -61,24 +52,14 @@ package starling.extensions.tmxmaps
 			_tileHeight = 0;
 			_tileWidth = 0;
 
+			_properties = new Dictionary();
 			_layers = new Vector.<TMXLayer>();
 			_tilesheets = new Vector.<TMXTileSheet>();
-			_gidLookup = new Vector.<uint>();
-		}
-
-		public function load(file:String):void
-		{
-			_fileName = file;
-			
-			trace(_fileName);
-
-			_loader.addEventListener(flash.events.Event.COMPLETE, loadTilesets);
-			_loader.load(new URLRequest(_fileName));
 		}
 
 		public function loadFromEmbed(tmx:XML, tilesets:Vector.<Bitmap>):void
 		{
-			_TMX = tmx;
+			_mapXML = tmx;
 			_embedTilesets = tilesets;
 
 			loadEmbedTilesets();
@@ -129,14 +110,19 @@ package starling.extensions.tmxmaps
 		{
 			return _properties;
 		}
+		
+		public function get backgroundColor():uint 
+		{
+			return _backgroundColor;
+		}
 
 		// End getters --------------------------------------
 		// get the number of tilsets from the TMX XML
 		private function getNumTilesets():uint
 		{
-			if (_mapLoaded)
+			if (_mapXML)
 			{
-				return _TMX.tileset.length();
+				return _mapXML.tileset.length();
 			}
 
 			return 0;
@@ -145,109 +131,86 @@ package starling.extensions.tmxmaps
 		// get the number of layers from the TMX XML
 		private function getNumLayers():uint
 		{
-			if (_mapLoaded)
+			if (_mapXML)
 			{
-				return _TMX.layer.length();
+				return _mapXML.layer.length();
 			}
 			return 0;
-		}
-
-		private function loadTilesets(event:flash.events.Event):void
-		{
-			trace("loading tilesets from file");
-			_mapLoaded = true;
-
-			_TMX = new XML(_loader.data);
-
-			if (_TMX)
-			{
-				_mapWidth = _TMX.@width;
-				_tileHeight = _TMX.@tileheight;
-				_tileWidth = _TMX.@tilewidth;
-
-				//trace("map width" + _mapWidth);
-
-				_numLayers = getNumLayers();
-				_numTilesets = getNumTilesets();
-
-				var tileSheet:TMXTileSheet = new TMXTileSheet();
-				tileSheet.loadTileSheet(_TMX.tileset[_tilelistCount].@name, _TMX.tileset[_tilelistCount].image.@source, _TMX.tileset[_tilelistCount].@tilewidth, _TMX.tileset[_tilelistCount].@tileheight, _TMX.tileset[_tilelistCount].@firstgid - 1);
-				tileSheet.addEventListener(starling.events.Event.COMPLETE, loadRemainingTilesets);
-				_tilesheets.push(tileSheet);
-				_gidLookup.push(_TMX.tileset[_tilelistCount].@firstgid);
-			}
-		}
+		}		
 
 		private function loadEmbedTilesets():void
 		{
-			//trace("loading embedded tilesets");
-			_mapLoaded = true;
-
-			if (_TMX)
+			if (_mapXML)
 			{
-				_mapWidth = _TMX.@width;
-				_tileHeight = _TMX.@tileheight;
-				_tileWidth = _TMX.@tilewidth;
-
-				//trace("map width" + _mapWidth);
+				_mapWidth = _mapXML.@width;
+				_tileHeight = _mapXML.@tileheight;
+				_tileWidth = _mapXML.@tilewidth;
+				
+				var bgColor:String = _mapXML.@backgroundcolor;
+				_backgroundColor = uint("0x" + bgColor.substring(1,bgColor.length));
 
 				_numLayers = getNumLayers();				
 				_numTilesets = getNumTilesets();
 				trace(_numTilesets);
-				// _TMX.properties.property[1].@value;
+				
+				for (var k:int = 0; k < _mapXML.properties.property.length(); k++) 
+				{
+					var mappname:String = _mapXML.properties.property[k].@name;
+					var mappvalue:String = _mapXML.properties.property[k].@value;
+					_properties[mappname] = mappvalue;
+				}
 
 				for (var i:int = 0; i < _numTilesets; i++)
 				{
 					var tileSheet:TMXTileSheet = new TMXTileSheet();
 					//trace(_TMX.tileset[i].@name, _embedTilesets[i], _TMX.tileset[i].@tilewidth, _TMX.tileset[i].@tileheight, _TMX.tileset[i].@firstgid - 1, _TMX.tileset[i].@spacing, _TMX.tileset[i].@margin);
-					tileSheet.loadEmbedTileSheet(_TMX.tileset[i].@name, _embedTilesets[i], _TMX.tileset[i].@tilewidth, _TMX.tileset[i].@tileheight, _TMX.tileset[i].@firstgid - 1, _TMX.tileset[i].@spacing, _TMX.tileset[i].@margin);
+					tileSheet.loadEmbedTileSheet(_mapXML.tileset[i].@name, _embedTilesets[i], _mapXML.tileset[i].@tilewidth, _mapXML.tileset[i].@tileheight, _mapXML.tileset[i].@firstgid - 1, _mapXML.tileset[i].@spacing, _mapXML.tileset[i].@margin);
 					
-					var qtdProp:int = _TMX.tileset[i].properties.property.length();
-					
-					for (var j:int = 0; j < _TMX.tileset[i].properties.property.length(); j++) 
+					for (var tcounter:int = 0; tcounter < _mapXML.tileset[i].tile.length(); tcounter++)
 					{
-						var pname:String = _TMX.tileset[i].properties.property[j].@name;
-						var pvalue:String = _TMX.tileset[i].properties.property[j].@value;
+						var tile:TMXTile = tileSheet.tileWithGID(int(_mapXML.tileset[i].tile[tcounter].@id));
+						
+						for (var l:int = 0; l < _mapXML.tileset[i].tile[tcounter].properties.property.length(); l++) 
+						{
+							var tilepname:String = _mapXML.tileset[i].tile[tcounter].properties.property[l].@name;
+							var tilepvalue:String = _mapXML.tileset[i].tile[tcounter].properties.property[l].@value;
+							
+							tile.properties[tilepname] = tilepvalue;
+						}
+					}
+					
+					for (var j:int = 0; j < _mapXML.tileset[i].properties.property.length(); j++) 
+					{
+						var pname:String = _mapXML.tileset[i].properties.property[j].@name;
+						var pvalue:String = _mapXML.tileset[i].properties.property[j].@value;
 						tileSheet.properties[pname] = pvalue;
 					}
 					
 					_tilesheets.push(tileSheet);
-					_gidLookup.push(_TMX.tileset[i].@firstgid);
 				}
 				
-				loadMapData();
+				if (!loadLayers())
+					trace("Error loading layers");
 			}
 		}
 
-		private function loadRemainingTilesets(event:starling.events.Event):void
+		private function loadLayers():Boolean
 		{
-			event.target.removeEventListener(starling.events.Event.COMPLETE, loadRemainingTilesets);
-
-			_tilelistCount++;
-			if (_tilelistCount >= _numTilesets)
-			{
-				//trace("done loading tilelists");
-				loadMapData();
-			}
-			else
-			{
-				trace(_TMX.tileset[_tilelistCount].@name);
-				var tileSheet:TMXTileSheet = new TMXTileSheet();
-				tileSheet.loadTileSheet(_TMX.tileset[_tilelistCount].@name, _TMX.tileset[_tilelistCount].image.@source, _TMX.tileset[_tilelistCount].@tilewidth, _TMX.tileset[_tilelistCount].@tileheight, _TMX.tileset[_tilelistCount].@firstgid - 1);
-				tileSheet.addEventListener(starling.events.Event.COMPLETE, loadRemainingTilesets);
-				_gidLookup.push(_TMX.tileset[_tilelistCount].@firstgid);
-				_tilesheets.push(tileSheet);
-			}
-		}
-
-		private function loadMapData():void
-		{
-			if (_mapLoaded)
+			if (_mapXML)
 			{
 				for (var i:int = 0; i < _numLayers; i++)
 				{
-					//trace("loading map data");
-					var ba:ByteArray = Base64.decode(_TMX.layer[i].data);
+					var name:String = _mapXML.layer[i].@name;
+					var tmxLayer:TMXLayer = new TMXLayer(name);
+					
+					for (var k:int = 0; k < _mapXML.layer[i].properties.property.length(); k++) 
+					{
+						var pname:String = _mapXML.layer[i].properties.property[k].@name;
+						var pvalue:String = _mapXML.layer[i].properties.property[k].@value;
+						tmxLayer.properties[pname] = pvalue;
+					}
+					
+					var ba:ByteArray = Base64.decode(_mapXML.layer[i].data);
 					ba.uncompress();
 
 					var data:Array = new Array();
@@ -263,14 +226,19 @@ package starling.extensions.tmxmaps
 
 						var gid:int = a | b << 8 | c << 16 | d << 24;
 						data.push(gid);
-					}
-
-					var tmxLayer:TMXLayer = new TMXLayer(data);
-
+					}					
+					
+					tmxLayer.layerData = data;
+					
 					_layers.push(tmxLayer);
 				}
 
-				drawLayers();
+				drawLayers();				
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 

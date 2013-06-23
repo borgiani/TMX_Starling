@@ -9,6 +9,7 @@
  */
 package starling.extensions.tmxmaps
 {
+	import flash.utils.Dictionary;
 	import starling.display.Sprite;
 	
 	/**
@@ -17,15 +18,15 @@ package starling.extensions.tmxmaps
 	 */
 	public class TMXLayer
 	{
-		// Layer Data is just an array of tile GIDs
-		private var _layerData:Array = new Array();
+		private var _name:String;		
+		private var _layerData:Array = new Array(); // Layer Data is just an array of tile GIDs
 		private var _layerSprite:Sprite;
-		private var _tiles:Vector.<TMXTile> = new Vector.<TMXTile>();
+		private var _properties:Dictionary = new Dictionary();
 		
-		public function TMXLayer(data:Array):void
+		public function TMXLayer(name:String):void
 		{
+			_name = name;
 			_layerSprite = new Sprite();
-			_layerData = data;
 		}
 		
 		public function get layerData():Array
@@ -36,6 +37,21 @@ package starling.extensions.tmxmaps
 		public function get layerSprite():Sprite
 		{
 			return _layerSprite;
+		}
+		
+		public function get name():String 
+		{
+			return _name;
+		}
+		
+		public function get properties():Dictionary 
+		{
+			return _properties;
+		}
+		
+		public function set layerData(value:Array):void 
+		{
+			_layerData = value;
 		}
 	}
 }

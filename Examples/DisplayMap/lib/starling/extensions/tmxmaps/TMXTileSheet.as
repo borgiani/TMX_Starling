@@ -125,7 +125,7 @@ package starling.extensions.tmxmaps
 
 			var newxml:XML = XML(xml.TextureAtlas);
 
-			trace(newxml);
+			//trace(newxml);
 
 			_textureAtlas = new TextureAtlas(Texture.fromBitmap(_sheet), newxml);
 			
