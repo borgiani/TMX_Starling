@@ -8,6 +8,7 @@ This extension is based on the one created by [Shaun Mitchell](http://wiki.starl
 
 The major contributions include:
   * Compatible with Starling v1.3
+  * Target is Tiled 0.9.0
   * Ability to use tilesets with margins and spacing
   * Improved performance by using flattened sprites
   * more to come...
@@ -24,15 +25,7 @@ Examples
 --------
 There is an example project included with the extension, but there are some examples below:
 
-Loading your tilemap dynamically:
-
-```actionscript
-var map:TMXTileMap = new TMXTileMap();
-map.addEventListener(Event.COMPLETE, loadComplete);
-map.load(exampleMap.tmx);
-```
-
-Or by using embedded assets:
+Loading your tilemap using embedded assets:
 ```actionscript
 [Embed(source="exampleTileSet.png")]
 private static var tilesetImage:Class;
@@ -52,7 +45,7 @@ var mapXML:XML = XML(new mapTMX());
 TMX.loadFromEmbed(mapXML, tilesets);
 ```
 
-Here's an example for displaying your map (works for both dynamic and embedded loading):
+Here's an example for displaying your map:
 ```actionscript
 private function loadComplete(e:Event):void 
 {
