@@ -17,8 +17,6 @@ package com.felipeborgiani.tmxexamples
 		[Embed(source = "../../../../assets/tmw_desert_spacing.png")]
 		private static var exampleTileSet:Class;
 		
-		private var mapTMX:TMXTileMap;
-		
 		public function DisplayMap()
 		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
@@ -32,11 +30,11 @@ package com.felipeborgiani.tmxexamples
 			var tilesets:Vector.<Bitmap> = new Vector.<Bitmap>();
 			tilesets.push(Bitmap(new exampleTileSet()));
 			
-			var mapTMX2:TMXTileMap = TMXTileMap.createMap(mapXML, tilesets);
+			var mapTMX:TMXTileMap = TMXTileMap.createMap(mapXML, tilesets);
 			
-			for (var i:int = 0; i < mapTMX2.layers.length; i++) 
+			for (var i:int = 0; i < mapTMX.layers.length; i++) 
 			{
-				addChild(mapTMX2.layers[i].layerSprite);
+				addChild(mapTMX.layers[i].layerSprite);
 			}
 		}	
 	}
