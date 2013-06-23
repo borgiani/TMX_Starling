@@ -32,18 +32,13 @@ package com.felipeborgiani.tmxexamples
 			var tilesets:Vector.<Bitmap> = new Vector.<Bitmap>();
 			tilesets.push(Bitmap(new exampleTileSet()));
 			
-			mapTMX = new TMXTileMap();
-			mapTMX.addEventListener(Event.COMPLETE, loadComplete);
-			mapTMX.loadFromEmbed(mapXML, tilesets);
-		}
-		
-		private function loadComplete(e:Event):void 
-		{
-			for (var i:int = 0; i < mapTMX.layers.length; i++) 
+			var mapTMX2:TMXTileMap = TMXTileMap.createMap(mapXML, tilesets);
+			
+			for (var i:int = 0; i < mapTMX2.layers.length; i++) 
 			{
-				addChild(mapTMX.layers[i].layerSprite);
+				addChild(mapTMX2.layers[i].layerSprite);
 			}
-		}		
+		}	
 	}
 
 }
