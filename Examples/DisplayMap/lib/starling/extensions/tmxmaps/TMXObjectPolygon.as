@@ -20,7 +20,7 @@ package starling.extensions.tmxmaps
 		
 		public function TMXObjectPolygon() 
 		{
-			
+			_points = new Vector.<Point>();
 		}
 		
 		public function get points():Vector.<Point> 

@@ -9,6 +9,7 @@
  */
 package starling.extensions.tmxmaps 
 {
+	import flash.geom.Point;
 	/**
 	 * ...
 	 * @author Felipe Borgiani
@@ -19,7 +20,7 @@ package starling.extensions.tmxmaps
 		
 		public function TMXObjectPolyline() 
 		{
-			
+			_points = new Vector.<Point>();
 		}
 		
 		public function get points():Vector.<Point> 
