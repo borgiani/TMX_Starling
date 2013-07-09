@@ -10,21 +10,17 @@
 package starling.extensions.tmxmaps
 {
 	import flash.display.Bitmap;
-	import flash.events.Event;
 	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import starling.display.Image;
-	import starling.events.Event;
-	import starling.events.EventDispatcher;
 	import starling.extensions.tmxmaps.tools.Base64;
-	import starling.utils.Color;
 
 	/**
 	 * @author Felipe Borgiani
 	 * Based on the original TMXTileSheet by Shaun Mitchell
 	 */
-	public class TMXTileMap extends EventDispatcher
+	public class TMXTileMap
 	{
 		// XML of TMX file
 		private var _mapXML:XML;
@@ -58,13 +54,33 @@ package starling.extensions.tmxmaps
 			_tilesheets = new Vector.<TMXTileSheet>();
 			_objectGroups = new Vector.<TMXObjectGroup>();
 		}
+		
+		/**
+		 * Creates a new TileMap
+		 * @param	tmx The XML from the .tmx file
+		 * @param	tilesets A vector of bitmaps, containing all the tileset images used on the tmx map
+		 * @return A tilemap loadded from the given tmx map and tilesets
+		 */
+		public static function createMap(tmx:XML, tilesets:Vector.<Bitmap>):TMXTileMap
+		{
+			var map:TMXTileMap = new TMXTileMap();
+			
+			map.load(tmx, tilesets);
+			
+			return map;
+		}
 
-		public function loadFromEmbed(tmx:XML, tilesets:Vector.<Bitmap>):void
+		/**
+		 * Loads the tilemap from a tmx file and a vector of tilesets
+		 * @param	tmx The XML from the .tmx file
+		 * @param	tilesets A vector of bitmaps, containing all the tileset images used on the tmx map
+		 */
+		public function load(tmx:XML, tilesets:Vector.<Bitmap>):void
 		{
 			_mapXML = tmx;
 			_embedTilesets = tilesets;
 
-			loadEmbedTilesets();
+			loadTilesets();
 			loadObjectGroups(tmx);
 		}
 
@@ -216,7 +232,7 @@ package starling.extensions.tmxmaps
 			}
 		}
 
-		private function loadEmbedTilesets():void
+		private function loadTilesets():void
 		{
 			if (_mapXML)
 			{
@@ -242,7 +258,7 @@ package starling.extensions.tmxmaps
 				{
 					var tileSheet:TMXTileSheet = new TMXTileSheet();
 					//trace(_TMX.tileset[i].@name, _embedTilesets[i], _TMX.tileset[i].@tilewidth, _TMX.tileset[i].@tileheight, _TMX.tileset[i].@firstgid - 1, _TMX.tileset[i].@spacing, _TMX.tileset[i].@margin);
-					tileSheet.loadEmbedTileSheet(_mapXML.tileset[i].@name, _embedTilesets[i], _mapXML.tileset[i].@tilewidth, _mapXML.tileset[i].@tileheight, _mapXML.tileset[i].@firstgid - 1, _mapXML.tileset[i].@spacing, _mapXML.tileset[i].@margin);
+					tileSheet.loadTileSheet(_mapXML.tileset[i].@name, _embedTilesets[i], _mapXML.tileset[i].@tilewidth, _mapXML.tileset[i].@tileheight, _mapXML.tileset[i].@firstgid - 1, _mapXML.tileset[i].@spacing, _mapXML.tileset[i].@margin);
 					
 					for (var tcounter:int = 0; tcounter < _mapXML.tileset[i].tile.length(); tcounter++)
 					{
@@ -354,8 +370,8 @@ package starling.extensions.tmxmaps
 				}
 			}
 
-			// notify that the load is complete
-			dispatchEvent(new starling.events.Event(starling.events.Event.COMPLETE));
+			// notify that the load is complete - will be implemented when async is working
+			//dispatchEvent(new starling.events.Event(starling.events.Event.COMPLETE));
 		}
 		
 		private function findTileWithGID(gid:uint):TMXTile

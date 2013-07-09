@@ -9,18 +9,14 @@
  */
 package starling.extensions.tmxmaps
 {
+	import flash.display.Bitmap;
+	import flash.events.Event;
 	import flash.utils.Dictionary;
-	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 
-	import flash.display.Bitmap;
-	import flash.display.DisplayObject;
-	import flash.display.Loader;
-	import flash.events.Event;
-	import flash.net.URLRequest;
 
 	/**
 	 * @author Felipe Borgiani
@@ -34,11 +30,10 @@ package starling.extensions.tmxmaps
 		// texture, atlas and loader
 		private var _sheet:Bitmap;
 		private var _textureAtlas:TextureAtlas;
-		private var _imageLoader:Loader = new Loader();
 		private var _firstID:uint;
 		private var _tileHeight:uint;
 		private var _tileWidth:uint;
-		private var _embedded:Boolean;
+		//private var _embedded:Boolean;
 		private var _spacing:uint;
 		private var _margin:uint;
 		// tiles
@@ -52,26 +47,9 @@ package starling.extensions.tmxmaps
 			_properties = new Dictionary();
 		}
 
-		public function loadTileSheet(name:String, sheetFile:String, tileWidth:uint, tileHeight:uint, startID:uint):void
-		{
-			_embedded = false;
-			_name = name;
-			_sheetFilename = sheetFile;
-			_firstID = startID;
-
-			_tileHeight = tileHeight;
-			_tileWidth = tileWidth;
-
-			trace("creating TMX tilesheet");
-
-			_imageLoader.contentLoaderInfo.addEventListener(flash.events.Event.COMPLETE, loadSheet);
-			_imageLoader.load(new URLRequest(_sheetFilename));
-		}
-
-		public function loadEmbedTileSheet(name:String, img:Bitmap, tileWidth:uint, tileHeight:uint, startID:uint, spacing:uint, margin:uint):void
+		public function loadTileSheet(name:String, img:Bitmap, tileWidth:uint, tileHeight:uint, startID:uint, spacing:uint, margin:uint):void
 		{
 			trace("creating TMX tilesheet");
-			_embedded = true;
 			_name = name;
 			_firstID = startID;
 
@@ -82,17 +60,6 @@ package starling.extensions.tmxmaps
 			
 			_spacing = spacing;
 			_margin = margin;
-
-			loadAtlas();
-		}
-
-		/*
-		Load the image file needed for this tilesheet
-		 */
-		private function loadSheet(event:flash.events.Event):void
-		{
-			var sprite:DisplayObject = _imageLoader.content;
-			_sheet = Bitmap(sprite);
 
 			loadAtlas();
 		}

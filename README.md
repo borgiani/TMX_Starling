@@ -23,35 +23,26 @@ This extension is still under development. If you want to contribute, feel free 
 
 Examples
 --------
-There is an example project included with the extension, but there are some examples below:
+There is an example project included with the extension. Here's one though:
 
-Loading your tilemap using embedded assets:
+Loading your tilemap using embedded assets and displaying it:
 ```actionscript
-[Embed(source="exampleTileSet.png")]
-private static var tilesetImage:Class;
- 
-[Embed(source="exampleMap.tmx", mimeType="application/octet-stream")]
-private static var mapTMX:Class;
+[Embed(source="../../../../assets/example.tmx", mimeType="application/octet-stream")]
+private static var exampleTMX:Class;
+ 	
+[Embed(source = "../../../../assets/tmw_desert_spacing.png")]
+private static var exampleTileSet:Class;
 
 // (...)
 
-var map:TMXTileMap = new TMXTileMap();
-map.addEventListener(Event.COMPLETE, loadComplete);
-
+var mapXML:XML = XML(new exampleTMX());
 var tilesets:Vector.<Bitmap> = new Vector.<Bitmap>();
-tilesets.push(Bitmap(new tilesetImage()));
- 
-var mapXML:XML = XML(new mapTMX());
-TMX.loadFromEmbed(mapXML, tilesets);
-```
-
-Here's an example for displaying your map:
-```actionscript
-private function loadComplete(e:Event):void 
+tilesets.push(Bitmap(new exampleTileSet()));
+			
+var mapTMX:TMXTileMap = TMXTileMap.createMap(mapXML, tilesets);
+			
+for (var i:int = 0; i < mapTMX.layers.length; i++) 
 {
-    for (var i:int = 0; i < map.layers.length; i++) 
-    {
-        addChild(map.layers[i].layerSprite);
-    }
+    addChild(mapTMX.layers[i].layerSprite);
 }
 ```
