@@ -10,6 +10,7 @@
 package starling.extensions.tmxmaps
 {
 	import flash.display.Bitmap;
+	import flash.geom.Point;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import starling.display.Image;
@@ -51,6 +52,7 @@ package starling.extensions.tmxmaps
 			_properties = new Dictionary();
 			_layers = new Vector.<TMXLayer>();
 			_tilesheets = new Vector.<TMXTileSheet>();
+			_objectGroups = new Vector.<TMXObjectGroup>();
 		}
 		
 		/**
@@ -79,6 +81,7 @@ package starling.extensions.tmxmaps
 			_embedTilesets = tilesets;
 
 			loadTilesets();
+			loadObjectGroups(tmx);
 		}
 
 		// Getters ------------------------------------------
@@ -152,7 +155,82 @@ package starling.extensions.tmxmaps
 				return _mapXML.layer.length();
 			}
 			return 0;
-		}		
+		}
+		
+		private function loadObjectGroups(tmx:XML):void 
+		{
+			for (var i:int = 0; i < tmx.objectgroup.length(); i++)
+			{
+				var objGroup:TMXObjectGroup = new TMXObjectGroup();
+				objGroup.name = tmx.objectgroup[i].@name;
+				objGroup.width = tmx.objectgroup[i].@width;
+				objGroup.height = tmx.objectgroup[i].@height;
+				
+				for (var j:int = 0; j < tmx.objectgroup[i].object.length(); j++)
+				{
+					var obj:TMXObject;
+					if (tmx.objectgroup[i].object[j].ellipse != undefined)
+					{
+						// Object is an ellipse
+						obj = new TMXObjectEllipse();
+					}
+					else if (tmx.objectgroup[i].object[j].polygon != undefined)
+					{
+						obj = new TMXObjectPolygon();
+						
+						var polyPointsString:String = tmx.objectgroup[i].object[j].polygon.@points;
+						var polyPoints:Array = polyPointsString.split(" ");
+						
+						for each (var polyPoint:String in polyPoints) 
+						{
+							var xy:Array = polyPoint.split(",");
+							var point:Point = new Point(Number(xy[0]), Number(xy[1]));
+							(obj as TMXObjectPolygon).points.push(point);
+						}
+					}
+					else if (tmx.objectgroup[i].object[j].polyline != undefined)
+					{
+						obj = new TMXObjectPolyline();
+						
+						var polylinePointsString:String = tmx.objectgroup[i].object[j].polyline.@points;
+						var polylinePoints:Array = polylinePointsString.split(" ");
+						
+						for each (var polylinePoint:String in polylinePoints) 
+						{
+							var linexy:Array = polylinePoint.split(",");
+							var linepoint:Point = new Point(Number(linexy[0]), Number(linexy[1]));
+							(obj as TMXObjectPolyline).points.push(linepoint);
+						}
+					}
+					else
+					{
+						obj = new TMXObject();
+					}
+					
+					obj.name = tmx.objectgroup[i].object[j].@name;
+					
+					var x:int = tmx.objectgroup[i].object[j].@x;
+					var y:int = tmx.objectgroup[i].object[j].@y;
+					obj.position = new Point(x, y);
+					
+					obj.width = tmx.objectgroup[i].object[j].@width;
+					obj.height = tmx.objectgroup[i].object[j].@height;					
+					obj.type = tmx.objectgroup[i].object[j].@type;					
+					obj.visible = tmx.objectgroup[i].object[j].@visible;
+					
+					for (var k:int = 0; k < tmx.objectgroup[i].object[j].properties.property.length(); k++)
+					{
+						var propName:String = tmx.objectgroup[i].object[j].properties.property[k].@name;
+						var propValue:String = tmx.objectgroup[i].object[j].properties.property[k].@value;
+						obj.properties[propName] = propValue;
+					}
+					
+					objGroup.objects.push(obj);
+				}
+				
+				objectGroups.push(objGroup);
+			}
+		}
 
 		private function loadTilesets():void
 		{

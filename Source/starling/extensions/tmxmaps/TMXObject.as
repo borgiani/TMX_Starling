@@ -32,6 +32,7 @@ package starling.extensions.tmxmaps
 		 */
 		public function TMXObject() 
 		{
+			_properties = new Dictionary();
 		}
 		
 		public function get name():String 
@@ -80,6 +81,46 @@ package starling.extensions.tmxmaps
 		public function get properties():Dictionary 
 		{
 			return _properties;
+		}
+		
+		public function set name(value:String):void 
+		{
+			_name = value;
+		}
+		
+		public function set type(value:String):void 
+		{
+			_type = value;
+		}
+		
+		public function set position(value:Point):void 
+		{
+			_position = value;
+		}
+		
+		public function set width(value:uint):void 
+		{
+			_width = value;
+		}
+		
+		public function set height(value:uint):void 
+		{
+			_height = value;
+		}
+		
+		public function set rotation(value:Number):void 
+		{
+			_rotation = value;
+		}
+		
+		public function set tileGID(value:uint):void 
+		{
+			_tileGID = value;
+		}
+		
+		public function set visible(value:Boolean):void 
+		{
+			_visible = value;
 		}
 		
 	}
