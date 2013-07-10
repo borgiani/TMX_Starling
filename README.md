@@ -11,14 +11,14 @@ The major contributions include:
   * Target is Tiled 0.9.0
   * Ability to use tilesets with margins and spacing
   * Improved performance by using flattened sprites
+  * Support for properties
+  * Support for Objects and Objectgroups
   * more to come...
 
 This extension is still under development. If you want to contribute, feel free to help out.
 
 **Known issues:**
   * Can't load tilemaps that use a TSX tileset
-  * No support for properties yet
-  * No support for objects yet
 
 
 Examples
