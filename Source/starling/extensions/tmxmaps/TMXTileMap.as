@@ -262,7 +262,7 @@ package starling.extensions.tmxmaps
 					
 					for (var tcounter:int = 0; tcounter < _mapXML.tileset[i].tile.length(); tcounter++)
 					{
-						var tile:TMXTile = tileSheet.tileWithGID(int(_mapXML.tileset[i].tile[tcounter].@id));
+						var tile:TMXTile = tileSheet.tileWithGID(int(_mapXML.tileset[i].tile[tcounter].@id) + tileSheet.firstID + 1);
 						
 						for (var l:int = 0; l < _mapXML.tileset[i].tile[tcounter].properties.property.length(); l++) 
 						{
